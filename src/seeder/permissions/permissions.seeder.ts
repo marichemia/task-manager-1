@@ -20,6 +20,19 @@ export class PermissionsSeeder {
       });
   }
 
+  async rolePermissions() {
+    await this.service
+      .rolePermissions()
+      .then((completed) => {
+        this.logger.debug('Successfuly completed seeding role permissions...');
+        Promise.resolve(completed);
+      })
+      .catch((error) => {
+        this.logger.error('Failed seeding role permissions...');
+        Promise.reject(error);
+      });
+  }
+
   async data() {
     return await Promise.all(this.service.create())
       .then((createdLanguages) => {

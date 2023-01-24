@@ -18,6 +18,7 @@ export const getTypeORMConfig = (): TypeOrmModuleAsyncOptions => ({
       entities: [join(__dirname, '..', './**/*.entity{.ts,.js}')],
       namingStrategy: new SnakeNamingStrategy(),
       synchronize: configService.get('PG_SYNC'), // never true in production!
+      ssl: configService.get('PG_SSL'),
     };
   },
 });

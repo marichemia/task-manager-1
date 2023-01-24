@@ -30,7 +30,7 @@ export class Task {
   @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'text' })
   description: string;
 
   @Column({ nullable: false, default: true, type: 'boolean' })
