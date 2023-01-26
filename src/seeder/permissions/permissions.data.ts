@@ -337,4 +337,12 @@ export const permissionsData: CreatePermissionDto[] = [
     groupKey: 'epic',
     active: true,
   },
+  {
+    name: 'permission:list',
+    key: 'permission:list',
+    description: 'Permission list',
+    groupName: 'Role',
+    groupKey: 'role',
+    active: true,
+  },
 ];

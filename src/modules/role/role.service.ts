@@ -19,6 +19,7 @@ import { RoleDto } from './dto/role.dto';
 import { User } from '../user/entities/user.entity';
 import { RoleSetPermissionsDto } from './dto/role-set-permissions.dto';
 import { Permission } from './entities/permission.entity';
+import { PermissionDto } from "./dto/permission.dto";
 
 @Injectable()
 export class RoleService {
@@ -193,6 +194,17 @@ export class RoleService {
         .addAndRemove(permissions, actualRelationships);
 
       return await this.findOne(dto.roleId);
+    } catch (e) {
+      throw new ExceptionType(e.statusCode, e.message);
+    }
+  }
+
+  async getAllPermissions(): Promise<Permission[]> {
+    try {
+      return await this.repository.manager
+        .getRepository(Permission)
+        .createQueryBuilder('permission')
+        .getMany();
     } catch (e) {
       throw new ExceptionType(e.statusCode, e.message);
     }

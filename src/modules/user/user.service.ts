@@ -34,7 +34,6 @@ export class UserService {
           'id',
           'firstName',
           'lastName',
-          'identityNumber',
           'mobileNumber',
           'email',
           'password',
@@ -71,7 +70,6 @@ export class UserService {
       const user = new User();
       user.firstName = userCreateDto.firstName;
       user.lastName = userCreateDto.lastName;
-      user.identityNumber = userCreateDto.identityNumber;
       user.email = userCreateDto.email;
       user.mobileNumber = userCreateDto.mobileNumber;
       user.isActive = userCreateDto.isActive || false;
@@ -145,7 +143,6 @@ export class UserService {
         {
           firstName: dto.firstName,
           lastName: dto.lastName,
-          identityNumber: dto.identityNumber,
           email: dto.email,
           mobileNumber: dto.mobileNumber,
           isActive: dto.isActive || false,

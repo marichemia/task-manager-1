@@ -79,7 +79,7 @@ export class AuthService {
   async findByIDForPayload(id: number): Promise<User> {
     return await this.userRepository.findOne({
       where: { id },
-      relations: ['roles', 'roles.permissions', 'userPermissions', 'projects'],
+      relations: ['roles', 'userPermissions', 'projects'],
     });
   }
 

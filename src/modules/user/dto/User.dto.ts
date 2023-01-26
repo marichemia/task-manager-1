@@ -25,9 +25,6 @@ export class UserDto {
   @ApiProperty()
   lastName: string;
 
-  @ApiPropertyOptional()
-  identityNumber: string;
-
   @ApiProperty()
   email: string;
 
@@ -56,7 +53,6 @@ export class UserDto {
     this.deletedAt = user.deletedAt;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
-    this.identityNumber = user.identityNumber;
     this.email = user.email;
     this.mobileNumber = user.mobileNumber;
     this.password = user.password;

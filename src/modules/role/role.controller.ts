@@ -22,10 +22,10 @@ import { ApiPaginatedResponse } from '../../common/api-pagination-responce';
 import { PaginationDto } from '../../common/dtos/page.dto';
 import { RolePageOptionsDto } from './dto/role-page-options.dto';
 import { RoleDto } from './dto/role.dto';
-import { Permission } from '../../decorators/permission.decorator';
 import { AuthUser } from '../../decorators/auth-user.decorator';
 import { User } from '../user/entities/user.entity';
 import { RoleSetPermissionsDto } from './dto/role-set-permissions.dto';
+import { Permission } from './entities/permission.entity';
 
 @ApiTags('Roles')
 @Controller('role')
@@ -41,6 +41,13 @@ export class RoleController {
     pageOptionsDto: RolePageOptionsDto,
   ): Promise<PaginationDto<RoleDto>> {
     return await this.roleService.pagination(pageOptionsDto);
+  }
+
+  @Get('/permission')
+  @Auth('permission:list')
+  @HttpCode(HttpStatus.OK)
+  async getAllPermissions(): Promise<Permission[]> {
+    return await this.roleService.getAllPermissions();
   }
 
   @Get('/my')
