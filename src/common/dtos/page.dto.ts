@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray } from "class-validator";
+import { Type } from "@nestjs/common/interfaces";
 
 interface IPageMeta {
   totalCount: number;
@@ -10,7 +11,7 @@ interface IPageMeta {
 export class PaginationDto<T> {
   @IsArray()
   @ApiProperty({
-    isArray: true,
+    isArray: true
   })
   readonly data: T[];
 

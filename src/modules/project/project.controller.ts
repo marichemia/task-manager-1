@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { ApiBadGatewayResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Permission } from '../../decorators/permission.decorator';
 import { ApiPaginatedResponse } from '../../common/api-pagination-responce';
 import { Auth } from '../../decorators/http.decorators';
 import { ProjectDto } from './dto/project.dto';
