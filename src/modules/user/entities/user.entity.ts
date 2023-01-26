@@ -38,15 +38,6 @@ export class User {
   lastName: string;
 
   @Column({
-    name: 'identity_no',
-    nullable: true,
-    type: 'character varying',
-    length: 20,
-  })
-  @Index()
-  identityNumber: string;
-
-  @Column({
     unique: true,
     nullable: false,
     type: 'character varying',

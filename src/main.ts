@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionsFilter());
   app.use(loggerMiddleware);
   setupSwagger(app);
-  await app.listen(80, '0.0.0.0');
+  await app.listen(3000);
 }
 
 bootstrap();
