@@ -79,7 +79,7 @@ export class AuthService {
   async findByIDForPayload(id: number): Promise<User> {
     return await this.userRepository.findOne({
       where: { id },
-      relations: ['roles', 'userPermissions', 'projects'],
+      relations: ['roles', 'roles.permissions', 'userPermissions', 'projects'],
     });
   }
 
@@ -116,8 +116,10 @@ export class AuthService {
 
   async createToken(user: User | UserDto): Promise<TokenPayloadDto> {
     const expiresIn = 84600;
+    const roles = user.roles.map((role) => role.name);
     const payload = {
       ...user,
+      roles: roles,
       sub: user.id,
     };
     const lastToken = await this.tokenRepository.findOne({

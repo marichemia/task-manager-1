@@ -42,6 +42,7 @@ export class ProjectController {
     @Query(new ValidationPipe({ transform: true }))
     pageOptionsDto: ProjectPageOptionsDto,
   ): Promise<PaginationDto<ProjectDto>> {
+    console.log(pageOptionsDto)
     return await this.projectService.pagination(pageOptionsDto);
   }
 
