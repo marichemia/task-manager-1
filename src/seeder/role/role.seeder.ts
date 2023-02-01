@@ -11,11 +11,11 @@ export class RoleSeeder {
   async seed() {
     await this.languages()
       .then((completed) => {
-        this.logger.debug('Successfuly completed seeding users...');
+        this.logger.debug('Successfuly completed seeding roles...');
         Promise.resolve(completed);
       })
       .catch((error) => {
-        this.logger.error('Failed seeding users...');
+        this.logger.error('Failed seeding roles...');
         Promise.reject(error);
       });
   }
@@ -25,7 +25,7 @@ export class RoleSeeder {
       .then((createdLanguages) => {
         // Can also use this.logger.verbose('...');
         this.logger.debug(
-          'No. of languages created : ' +
+          'created : ' +
             // Remove all null values and return only created languages.
             createdLanguages.filter(
               (nullValueOrCreatedLanguage) => nullValueOrCreatedLanguage,

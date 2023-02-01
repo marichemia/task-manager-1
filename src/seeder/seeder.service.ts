@@ -11,7 +11,7 @@ export class SeederService {
 
   async seed() {
     await this.permissionsSeeder.seed();
-    await this.permissionsSeeder.rolePermissions();
     await this.roleSeeder.seed();
+    await this.permissionsSeeder.rolePermissions();
   }
 }

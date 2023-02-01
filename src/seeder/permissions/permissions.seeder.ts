@@ -38,7 +38,7 @@ export class PermissionsSeeder {
       .then((createdLanguages) => {
         // Can also use this.logger.verbose('...');
         this.logger.debug(
-          'No. of languages created : ' +
+          'created : ' +
             // Remove all null values and return only created languages.
             createdLanguages.filter(
               (nullValueOrCreatedLanguage) => nullValueOrCreatedLanguage,
