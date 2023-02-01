@@ -114,8 +114,12 @@ export class AuthService {
     }
   }
 
-  async createToken(user: User | UserDto): Promise<TokenPayloadDto> {
+  async createToken(dto: User | UserDto): Promise<TokenPayloadDto> {
     const expiresIn = 84600;
+    const user = await this.userRepository.findOne({
+      where: { id: dto.id },
+      relations: ['roles'],
+    });
     const roles = user.roles.map((role) => role.name);
     const payload = {
       ...user,
