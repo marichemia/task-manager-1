@@ -116,6 +116,8 @@ export class ProjectService {
         {
           name: dto.name,
           abbreviation: dto.abbreviation,
+          description: dto.description,
+          color: dto.color
         },
       );
       return await this.findOne(projectId);
