@@ -51,4 +51,13 @@ export class AuthController {
   ): Promise<LoginPayloadDto> {
     return this.usersService.refreshToken(refreshTokenDto);
   }
+
+  @Post('checkEmail')
+  @ApiOkResponse({
+    type: () => Boolean,
+    description: 'Check if email is already in use',
+  })
+  async checkEmail(@Body() email: string): Promise<boolean> {
+    return await this.usersService.checkEmail(email);
+  }
 }

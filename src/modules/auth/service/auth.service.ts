@@ -163,4 +163,9 @@ export class AuthService {
 
     return user;
   }
+
+  async checkEmail(email: string): Promise<boolean> {
+    const userFound = await this.userRepository.findOne({ where: { email } });
+    return !!userFound;
+  }
 }
