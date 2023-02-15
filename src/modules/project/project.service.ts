@@ -24,26 +24,13 @@ export class ProjectService {
   async pagination(
     pageOptionsDto: ProjectPageOptionsDto,
   ): Promise<PaginationDto<ProjectDto>> {
-    const { search, countryId, regionId, cityId } = pageOptionsDto;
+    const { search } = pageOptionsDto;
     try {
       const queryBuilder = this.repository
         .createQueryBuilder('project')
         .where(`1=1`);
       if (search) {
         queryBuilder.andWhere(`project.name ILIKE '%${search}%'`);
-      }
-      if (countryId) {
-        queryBuilder.andWhere(`project.country_id = :countryId`, {
-          countryId: countryId,
-        });
-      }
-      if (regionId) {
-        queryBuilder.andWhere(`project.region_id = :regionId`, {
-          regionId: regionId,
-        });
-      }
-      if (cityId) {
-        queryBuilder.andWhere(`project.city_id = :cityId`, { cityId: cityId });
       }
       const totalCount = await queryBuilder.getCount();
       const items = await queryBuilder
@@ -93,7 +80,6 @@ export class ProjectService {
   }
 
   async findOne(projectId: number): Promise<ProjectDto> {
-    console.log(projectId);
     try {
       const project = await this.repository.findOne({
         where: { id: projectId },
@@ -110,15 +96,18 @@ export class ProjectService {
 
   async update(projectId: number, dto: UpdateProjectDto): Promise<ProjectDto> {
     try {
-      await this.findOne(projectId);
+      const project = await this.findOne(projectId);
+      const projectParams: any = {
+        name: dto.name,
+        description: dto.description,
+        color: dto.color
+      }
+      if(project.abbreviation !== dto.abbreviation){
+        projectParams.abbreviation = dto.abbreviation
+      }
       await this.repository.update(
         { id: projectId },
-        {
-          name: dto.name,
-          abbreviation: dto.abbreviation,
-          description: dto.description,
-          color: dto.color
-        },
+        projectParams,
       );
       return await this.findOne(projectId);
     } catch (e) {

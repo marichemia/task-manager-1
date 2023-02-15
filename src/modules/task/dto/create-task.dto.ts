@@ -3,13 +3,15 @@ import { TaskPriorityEnum } from '../../../common/enums/task-priority.enum';
 import { TaskStatusEnum } from '../../../common/enums/task-status.enum';
 import { IssueTypeColumnDto } from '../../issue-type/dto/issue-type-column.dto';
 import { CreateTaskPropertyDto } from './create-task-property.dto';
-import { IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateTaskDto {
+  @IsString()
   @IsNotEmpty()
   @ApiProperty()
   name: string;
 
+  @IsString()
   @IsNotEmpty()
   @ApiProperty()
   description: string;

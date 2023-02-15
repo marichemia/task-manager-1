@@ -9,6 +9,7 @@ import { TaskDto } from '../../task/dto/task.dto';
 
 export class BoardDto {
   @ApiProperty()
+  @IsNotEmpty()
   id: number;
 
   @ApiProperty()
