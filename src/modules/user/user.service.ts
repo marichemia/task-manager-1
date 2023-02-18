@@ -97,9 +97,7 @@ export class UserService {
           new Brackets((qb) => {
             qb.where(`user.email ILIKE '%${search}%' OR 
           user.first_name ILIKE '%${search}%' OR 
-          user.last_name ILIKE '%${search}%' OR 
-          user.identity_no ILIKE '%${search}%' OR 
-          user.mobile_no ILIKE '%${search}%'`);
+          user.last_name ILIKE '%${search}%'`);
           }),
         );
       }
