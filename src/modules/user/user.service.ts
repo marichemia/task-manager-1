@@ -19,6 +19,7 @@ import { DeleteDto } from '../../common/dtos/delete.dto';
 import { snakeCase } from 'change-case';
 import { UserSetRolesDto } from './dto/user-set-roles.dto';
 import { Role } from '../role/entities/role.entity';
+import { AllUsersDto } from "./dto/all-users.dto";
 
 @Injectable()
 export class UserService {
@@ -125,9 +126,22 @@ export class UserService {
     }
   }
 
-  async getAllUsers(): Promise<UserDto[]> {
+  async getAllUsers(dto: AllUsersDto): Promise<UserDto[]> {
     try {
-      return await this.userRepository.find();
+      const { search } = dto;
+      const queryBuilder = this.userRepository
+        .createQueryBuilder('user')
+        .where(`user.is_active = :isActive`, { isActive: true });
+      if (search) {
+        queryBuilder.andWhere(
+          new Brackets((qb) => {
+            qb.where(`user.email ILIKE '%${search}%' OR 
+          user.first_name ILIKE '%${search}%' OR 
+          user.last_name ILIKE '%${search}%'`);
+          }),
+        );
+      }
+      return await queryBuilder.getMany();
     } catch (e) {
       console.error('Error', e.message);
       throw new ExceptionType(e.statusCode, e.message);

@@ -33,6 +33,7 @@ import { UserSetRolesDto } from './dto/user-set-roles.dto';
 import { ProjectAccess } from '../../decorators/project.decorator';
 import { HeaderProject } from '../../decorators/project-http.decorator';
 import { Project } from '../project/project.entity';
+import { AllUsersDto } from "./dto/all-users.dto";
 
 @Controller('users')
 @ApiTags('Users')
@@ -59,8 +60,10 @@ export class UserController {
     type: UserDto,
     isArray: true,
   })
-  async getAllUsers(): Promise<UserDto[]> {
-    return await this.userService.getAllUsers();
+  async getAllUsers(
+    @Query(new ValidationPipe({ transform: true })) dto: AllUsersDto,
+  ): Promise<UserDto[]> {
+    return await this.userService.getAllUsers(dto);
   }
 
   @Post()
