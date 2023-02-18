@@ -95,16 +95,14 @@ export class ProjectService {
   }
 
   async update(projectId: number, dto: UpdateProjectDto): Promise<ProjectDto> {
+    console.log(dto)
     try {
       const project = await this.findOne(projectId);
       const projectParams: any = {
         name: dto.name,
         description: dto.description,
         color: dto.color
-      }
-      if(project.abbreviation !== dto.abbreviation){
-        projectParams.abbreviation = dto.abbreviation
-      }
+      };
       await this.repository.update(
         { id: projectId },
         projectParams,

@@ -139,6 +139,7 @@ export class ProjectController {
     @Param('projectId') projectId: number,
     @Body(new ValidationPipe({ transform: true })) dto: UpdateProjectDto,
   ): Promise<ProjectDto> {
+    console.log(dto)
     return await this.projectService.update(projectId, dto);
   }
 
