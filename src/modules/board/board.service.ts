@@ -62,6 +62,7 @@ export class BoardService {
 
   async findOne(id: number): Promise<BoardDto> {
     try {
+      // Todo order columns by position
       const board = await this.boardRepository.findOne({
         where: { id },
         relations: ['columns'],
@@ -90,6 +91,7 @@ export class BoardService {
       if (updateBoardDto.columns && updateBoardDto.columns.length > 0) {
         const boardColumns: BoardColumn[] = [];
         for (const column of updateBoardDto.columns) {
+          console.log(column);
           const findBoardColumn = await queryRunner.manager.findOne(
             BoardColumn,
             {
@@ -99,14 +101,14 @@ export class BoardService {
           if (findBoardColumn) {
             findBoardColumn.name = column.name;
             findBoardColumn.description = column.description;
-            findBoardColumn.position = column.position;
+            findBoardColumn.position = +column.position;
             findBoardColumn.taskStatus = column.taskStatus;
             boardColumns.push(findBoardColumn);
           } else {
             const boardColumn = new BoardColumn();
             boardColumn.name = column.name;
             boardColumn.description = column.description;
-            boardColumn.position = column.position;
+            boardColumn.position = +column.position;
             boardColumn.taskStatus = column.taskStatus;
             boardColumn.boardId = savedBoard.id;
             boardColumns.push(boardColumn);
