@@ -66,6 +66,11 @@ export class BoardService {
       const board = await this.boardRepository.findOne({
         where: { id },
         relations: ['columns'],
+        order: {
+          columns: {
+            position: 'ASC',
+          },
+        },
       });
       if (!board) {
         throw new ExceptionType(404, 'Board not found');
