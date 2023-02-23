@@ -250,6 +250,14 @@ export const permissionsData: CreatePermissionDto[] = [
     active: true,
   },
   {
+    name: 'task:list',
+    key: 'task:list',
+    description: 'list task',
+    groupName: 'Task',
+    groupKey: 'task',
+    active: true,
+  },
+  {
     name: 'task:delete',
     key: 'task:delete',
     description: 'Delete task',

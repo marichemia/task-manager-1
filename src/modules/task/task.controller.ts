@@ -9,6 +9,7 @@ import {
   Put,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -22,6 +23,7 @@ import { TaskDto } from './dto/task.dto';
 import { AuthUser } from '../../decorators/auth-user.decorator';
 import { UserDto } from '../user/dto/User.dto';
 import { DeleteDto } from '../../common/dtos/delete.dto';
+import { GetTasksDto } from './dto/get-tasks.dto';
 
 @ApiTags('Tasks')
 @Controller('task')
@@ -57,8 +59,11 @@ export class TaskController {
     type: TaskDto,
     isArray: true,
   })
-  async findAll(@HeaderProject() project: Project): Promise<TaskDto[]> {
-    return await this.taskService.findAll(project.id);
+  async findAll(
+    @HeaderProject() project: Project,
+    @Query() dto: GetTasksDto,
+  ): Promise<TaskDto[]> {
+    return await this.taskService.findAll(project.id, dto.boardId);
   }
 
   @Get(':id')

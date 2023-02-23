@@ -63,9 +63,9 @@ export class TaskService {
     }
   }
 
-  async findAll(projectId: number): Promise<TaskDto[]> {
+  async findAll(projectId: number, boardId: number): Promise<TaskDto[]> {
     return await this.repository.find({
-      where: { projectId },
+      where: { projectId, boardId },
       relations: [
         'taskProperties',
         'project',

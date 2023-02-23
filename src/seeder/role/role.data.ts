@@ -1,4 +1,4 @@
-import { CreateRoleDto } from "../../modules/role/dto/create-role.dto";
+import { CreateRoleDto } from '../../modules/role/dto/create-role.dto';
 
 export const roleSeeder: CreateRoleDto[] = [
   {
