@@ -63,7 +63,7 @@ export class TaskController {
     @HeaderProject() project: Project,
     @Query() dto: GetTasksDto,
   ): Promise<TaskDto[]> {
-    return await this.taskService.findAll(project.id, dto.boardId);
+    return await this.taskService.findAll(project.id, dto);
   }
 
   @Get(':id')

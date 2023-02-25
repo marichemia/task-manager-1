@@ -9,6 +9,7 @@ import { TaskProperty } from './entities/task-property.entity';
 import { ExceptionType } from '../../common/exceptions/types/ExceptionType';
 import { BoardColumn } from '../board/entities/board-column.entity';
 import { DeleteDto } from '../../common/dtos/delete.dto';
+import { GetTasksDto } from './dto/get-tasks.dto';
 
 @Injectable()
 export class TaskService {
@@ -63,9 +64,9 @@ export class TaskService {
     }
   }
 
-  async findAll(projectId: number, boardId: number): Promise<TaskDto[]> {
+  async findAll(projectId: number, dto: GetTasksDto): Promise<TaskDto[]> {
     return await this.repository.find({
-      where: { projectId, boardId },
+      where: { projectId, boardId: dto.boardId, isBacklog: dto.isBacklog },
       relations: [
         'taskProperties',
         'project',
@@ -119,12 +120,19 @@ export class TaskService {
       if (!task) {
         throw new ExceptionType(404, 'Task not found');
       }
+      const boardColumn = await queryRunner.manager.findOne(BoardColumn, {
+        where: { boardId: updateTaskDto.boardId, taskStatus: updateTaskDto.taskStatus },
+        order: {
+          position: 'ASC',
+        },
+      });
+
       task.name = updateTaskDto.name;
       task.description = updateTaskDto.description;
       task.issueTypeId = updateTaskDto.issueTypeId;
       task.epicId = updateTaskDto.epicId;
       task.boardId = updateTaskDto.boardId;
-      task.boardColumnId = updateTaskDto.boardColumnId;
+      task.boardColumnId = updateTaskDto.boardColumnId || boardColumn.id;
       task.isBacklog = updateTaskDto.isBacklog;
       task.priority = updateTaskDto.priority;
       task.taskStatus = updateTaskDto.taskStatus;

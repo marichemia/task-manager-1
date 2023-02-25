@@ -85,6 +85,7 @@ export class RoleService {
     try {
       const role = await this.repository.findOne({
         where: { id: roleId },
+        relations: ['permissions'],
       });
       return role.toDto();
     } catch (e) {

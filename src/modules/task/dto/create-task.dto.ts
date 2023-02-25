@@ -29,7 +29,6 @@ export class CreateTaskDto {
   @ApiPropertyOptional()
   epicId: number;
 
-  @IsNotEmpty()
   @ApiProperty()
   boardId: number;
 
