@@ -17,5 +17,5 @@ export class RoleSetPermissionsDto {
   roleId: string;
 
   @ApiProperty()
-  permissionIds: string[];
+  permissions: string[];
 }

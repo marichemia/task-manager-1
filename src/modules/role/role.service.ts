@@ -7,7 +7,7 @@ import {
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getManager, getRepository, Repository } from 'typeorm';
+import { getManager, getRepository, In, Repository } from 'typeorm';
 import { PaginationDto } from '../../common/dtos/page.dto';
 import { snakeCase } from 'typeorm/util/StringUtils';
 import { ExceptionType } from '../../common/exceptions/types/ExceptionType';
@@ -19,7 +19,7 @@ import { RoleDto } from './dto/role.dto';
 import { User } from '../user/entities/user.entity';
 import { RoleSetPermissionsDto } from './dto/role-set-permissions.dto';
 import { Permission } from './entities/permission.entity';
-import { PermissionDto } from "./dto/permission.dto";
+import { PermissionDto } from './dto/permission.dto';
 
 @Injectable()
 export class RoleService {
@@ -172,23 +172,26 @@ export class RoleService {
       const errors = { message: 'not found' };
       throw new HttpException(errors, HttpStatus.NOT_FOUND);
     }
-    const permissions = await this.repository.manager.findByIds(
-      Permission,
-      dto.permissionIds,
-    );
+    const permissions = await this.repository.manager.find(Permission, {
+      where: {
+        id: In(dto.permissions),
+      },
+    });
 
     if (!permissions.length) {
       throw new BadRequestException('უფლება არ არის მითითებული');
     }
 
     try {
-      const actualRelationships = await getRepository(Role)
+      const actualRelationships = await this.repository.manager
+        .getRepository(Role)
         .createQueryBuilder()
         .relation(Role, 'permissions')
         .of(dto.roleId)
         .loadMany();
 
-      await getRepository(Role)
+      await this.repository.manager
+        .getRepository(Role)
         .createQueryBuilder()
         .relation(Role, 'permissions')
         .of(dto.roleId)
