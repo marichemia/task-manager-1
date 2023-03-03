@@ -96,7 +96,6 @@ export class BoardService {
       if (updateBoardDto.columns && updateBoardDto.columns.length > 0) {
         const boardColumns: BoardColumn[] = [];
         for (const column of updateBoardDto.columns) {
-          console.log(column);
           const findBoardColumn = await queryRunner.manager.findOne(
             BoardColumn,
             {
@@ -108,7 +107,7 @@ export class BoardService {
             findBoardColumn.description = column.description;
             findBoardColumn.position = +column.position;
             findBoardColumn.taskStatus = column.taskStatus;
-            boardColumns.push(findBoardColumn);
+            await queryRunner.manager.save(BoardColumn, findBoardColumn);
           } else {
             const boardColumn = new BoardColumn();
             boardColumn.name = column.name;
@@ -116,7 +115,7 @@ export class BoardService {
             boardColumn.position = +column.position;
             boardColumn.taskStatus = column.taskStatus;
             boardColumn.boardId = savedBoard.id;
-            boardColumns.push(boardColumn);
+            await queryRunner.manager.save(BoardColumn, boardColumn);
           }
         }
         await queryRunner.manager.save(BoardColumn, boardColumns);

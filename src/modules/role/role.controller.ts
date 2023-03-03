@@ -53,7 +53,12 @@ export class RoleController {
   @Get('/my')
   @Auth()
   @HttpCode(HttpStatus.OK)
-  @ApiPaginatedResponse(RoleDto)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get role my',
+    type: RoleDto,
+    isArray: true,
+  })
   async myRoles(@AuthUser() user: User): Promise<RoleDto[]> {
     return await this.roleService.myRoles(user);
   }

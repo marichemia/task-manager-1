@@ -19,7 +19,7 @@ import { DeleteDto } from '../../common/dtos/delete.dto';
 import { snakeCase } from 'change-case';
 import { UserSetRolesDto } from './dto/user-set-roles.dto';
 import { Role } from '../role/entities/role.entity';
-import { AllUsersDto } from "./dto/all-users.dto";
+import { AllUsersDto } from './dto/all-users.dto';
 
 @Injectable()
 export class UserService {
@@ -65,16 +65,19 @@ export class UserService {
       throw new ExceptionType(400, 'One of the fields is required: email');
     }
     try {
-      const randomPassword = String(
-        Math.floor(100000 + Math.random() * 900000),
-      );
       const user = new User();
       user.firstName = userCreateDto.firstName;
       user.lastName = userCreateDto.lastName;
       user.email = userCreateDto.email;
       user.mobileNumber = userCreateDto.mobileNumber;
-      user.isActive = userCreateDto.isActive || false;
-      user.password = randomPassword;
+      user.isActive = userCreateDto.isActive || true;
+      user.password = '123456';
+
+      const customerRole = await this.userRepository.manager.findOne(Role, {
+        where: { name: 'Customer' },
+      });
+
+      user.roles = [customerRole];
       const createdUser = await this.userRepository.create(user);
       if (createdUser) {
         await this.userRepository.save(createdUser);
@@ -234,7 +237,8 @@ export class UserService {
         .of(dto.userId)
         .loadMany();
 
-      await this.userRepository.manager.getRepository(User)
+      await this.userRepository.manager
+        .getRepository(User)
         .createQueryBuilder()
         .relation(User, 'roles')
         .of(dto.userId)

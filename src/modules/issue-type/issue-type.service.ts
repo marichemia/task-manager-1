@@ -68,19 +68,49 @@ export class IssueTypeService {
     try {
       const findIssueType = await this.repository.findOne({
         where: { id: id, projectId: dto.projectId },
+        relations: ['issueTypeColumns'],
       });
+      console.log(findIssueType);
       if (!findIssueType) {
         throw new ExceptionType(404, 'Issue type not found');
       }
+      const findIssueTypeColumns = await this.repository.manager.find(
+        IssueTypeColumn,
+        {
+          where: { issueTypeId: findIssueType.id },
+        },
+      );
+      const deleteIssueTypeColumns = findIssueTypeColumns.filter(
+        (f) => !dto.issueTypeColumns.find((i) => i.id === f.id),
+      );
+      if (deleteIssueTypeColumns && deleteIssueTypeColumns.length > 0) {
+        deleteIssueTypeColumns.forEach(async (item) => {
+          await this.repository.manager.softDelete(IssueTypeColumn, {
+            id: item.id,
+          });
+        });
+      }
+
       if (dto.issueTypeColumns && dto.issueTypeColumns.length > 0) {
         const issueTypeColumns: IssueTypeColumn[] = [];
         dto.issueTypeColumns.forEach((item) => {
-          const issueTypeColumn = new IssueTypeColumn();
-          issueTypeColumn.name = item.name;
-          issueTypeColumn.filedName = item.filedName;
-          issueTypeColumn.isRequired = item.isRequired;
-          issueTypeColumn.issueTypeId = findIssueType.id;
-          issueTypeColumns.push(issueTypeColumn);
+          const findIssueTypeColumn = findIssueTypeColumns.find(
+            (f) => f.id === item.id,
+          );
+          if (findIssueTypeColumn) {
+            findIssueTypeColumn.name = item.name;
+            findIssueTypeColumn.filedName = item.filedName;
+            findIssueTypeColumn.isRequired = item.isRequired;
+            issueTypeColumns.push(findIssueTypeColumn);
+          }
+          if (!findIssueTypeColumn) {
+            const issueTypeColumn = new IssueTypeColumn();
+            issueTypeColumn.name = item.name;
+            issueTypeColumn.filedName = item.filedName;
+            issueTypeColumn.isRequired = item.isRequired;
+            issueTypeColumn.issueTypeId = findIssueType.id;
+            issueTypeColumns.push(issueTypeColumn);
+          }
         });
         findIssueType.issueTypeColumns = await this.repository.manager.save(
           IssueTypeColumn,
