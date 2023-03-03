@@ -92,15 +92,15 @@ export class BoardService {
       board.description = updateBoardDto.description;
       board.position = updateBoardDto.position;
 
-      const boardColumns = await queryRunner.manager.find(BoardColumn, {
-        where: { boardId: board.id },
-      });
-      const deleteBoardColumns = boardColumns.filter(
+
+      const deleteBoardColumns = board.columns.filter(
         (boardColumn) =>
           !updateBoardDto.columns.find(
             (column) => column.id === boardColumn.id,
           ),
       );
+
+      console.log(deleteBoardColumns)
 
       if (deleteBoardColumns && deleteBoardColumns.length > 0) {
         await queryRunner.manager.softDelete(BoardColumn, deleteBoardColumns);
@@ -109,7 +109,7 @@ export class BoardService {
       if (updateBoardDto.columns && updateBoardDto.columns.length > 0) {
         const boardColumns: BoardColumn[] = [];
         updateBoardDto.columns.forEach((column) => {
-          const findBoardColumn = boardColumns.find(
+          const findBoardColumn = board.columns.find(
             (boardColumn) => boardColumn.id === column.id,
           );
           if (findBoardColumn) {

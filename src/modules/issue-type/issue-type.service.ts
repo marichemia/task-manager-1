@@ -74,13 +74,7 @@ export class IssueTypeService {
       if (!findIssueType) {
         throw new ExceptionType(404, 'Issue type not found');
       }
-      const findIssueTypeColumns = await this.repository.manager.find(
-        IssueTypeColumn,
-        {
-          where: { issueTypeId: findIssueType.id },
-        },
-      );
-      const deleteIssueTypeColumns = findIssueTypeColumns.filter(
+      const deleteIssueTypeColumns = findIssueType.issueTypeColumns.filter(
         (f) => !dto.issueTypeColumns.find((i) => i.id === f.id),
       );
       if (deleteIssueTypeColumns && deleteIssueTypeColumns.length > 0) {
@@ -94,7 +88,7 @@ export class IssueTypeService {
       if (dto.issueTypeColumns && dto.issueTypeColumns.length > 0) {
         const issueTypeColumns: IssueTypeColumn[] = [];
         dto.issueTypeColumns.forEach((item) => {
-          const findIssueTypeColumn = findIssueTypeColumns.find(
+          const findIssueTypeColumn = findIssueType.issueTypeColumns.find(
             (f) => f.id === item.id,
           );
           if (findIssueTypeColumn) {
