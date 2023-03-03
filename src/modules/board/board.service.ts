@@ -92,36 +92,51 @@ export class BoardService {
       board.description = updateBoardDto.description;
       board.position = updateBoardDto.position;
 
-      const savedBoard = await queryRunner.manager.save(Board, board);
+      const boardColumns = await queryRunner.manager.find(BoardColumn, {
+        where: { boardId: board.id },
+      });
+      const deleteBoardColumns = boardColumns.filter(
+        (boardColumn) =>
+          !updateBoardDto.columns.find(
+            (column) => column.id === boardColumn.id,
+          ),
+      );
+
+      if (deleteBoardColumns && deleteBoardColumns.length > 0) {
+        await queryRunner.manager.softDelete(BoardColumn, deleteBoardColumns);
+      }
+
       if (updateBoardDto.columns && updateBoardDto.columns.length > 0) {
         const boardColumns: BoardColumn[] = [];
-        for (const column of updateBoardDto.columns) {
-          const findBoardColumn = await queryRunner.manager.findOne(
-            BoardColumn,
-            {
-              where: { id: column.id },
-            },
+        updateBoardDto.columns.forEach((column) => {
+          const findBoardColumn = boardColumns.find(
+            (boardColumn) => boardColumn.id === column.id,
           );
           if (findBoardColumn) {
             findBoardColumn.name = column.name;
             findBoardColumn.description = column.description;
-            findBoardColumn.position = +column.position;
+            findBoardColumn.position = column.position;
             findBoardColumn.taskStatus = column.taskStatus;
-            await queryRunner.manager.save(BoardColumn, findBoardColumn);
+            boardColumns.push(findBoardColumn);
           } else {
             const boardColumn = new BoardColumn();
             boardColumn.name = column.name;
             boardColumn.description = column.description;
-            boardColumn.position = +column.position;
+            boardColumn.position = column.position;
             boardColumn.taskStatus = column.taskStatus;
-            boardColumn.boardId = savedBoard.id;
-            await queryRunner.manager.save(BoardColumn, boardColumn);
+            boardColumn.boardId = board.id;
+            boardColumns.push(boardColumn);
           }
-        }
-        await queryRunner.manager.save(BoardColumn, boardColumns);
+        });
+        board.columns = await queryRunner.manager.save(
+          BoardColumn,
+          boardColumns,
+        );
       }
+
+      await queryRunner.manager.save(Board, board);
       await queryRunner.commitTransaction();
-      return await this.findOne(savedBoard.id);
+      return board;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new ExceptionType(error.statusCode, error.message);
