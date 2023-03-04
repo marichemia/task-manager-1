@@ -95,18 +95,15 @@ export class ProjectService {
   }
 
   async update(projectId: number, dto: UpdateProjectDto): Promise<ProjectDto> {
-    console.log(dto)
+    console.log(dto);
     try {
       const project = await this.findOne(projectId);
       const projectParams: any = {
         name: dto.name,
         description: dto.description,
-        color: dto.color
+        color: dto.color,
       };
-      await this.repository.update(
-        { id: projectId },
-        projectParams,
-      );
+      await this.repository.update({ id: projectId }, projectParams);
       return await this.findOne(projectId);
     } catch (e) {
       throw new ExceptionType(e.statusCode, e.message);
@@ -155,5 +152,18 @@ export class ProjectService {
       relations: ['users'],
     });
     return users;
+  }
+
+  async deleteProjectUsers(
+    project: Project,
+    userId: number,
+  ): Promise<DeleteDto> {
+    const { users } = await this.repository.findOne({
+      where: { id: project.id },
+      relations: ['users'],
+    });
+    project.users = users.filter((user) => user.id !== userId);
+    await this.repository.save(project);
+    return { deleted: true };
   }
 }

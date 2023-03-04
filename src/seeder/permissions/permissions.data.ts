@@ -178,6 +178,14 @@ export const permissionsData: CreatePermissionDto[] = [
     active: true,
   },
   {
+    name: 'project:users:delete',
+    key: 'project:users:delete',
+    description: 'delete users for project',
+    groupName: 'Project',
+    groupKey: 'project',
+    active: true,
+  },
+  {
     name: 'project:users:list',
     key: 'project:users:list',
     description: 'List users for project',

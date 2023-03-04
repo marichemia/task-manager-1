@@ -101,6 +101,20 @@ export class ProjectController {
     return await this.projectService.setUsers(projectUsersDto);
   }
 
+  @Delete('users/:userId')
+  @Auth('project:users:delete')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get users list by project',
+    type: UserDto,
+    isArray: true,
+  })
+  @ProjectAccess()
+  async deleteProjectUsers(@HeaderProject() project: Project, @Param('userId') userId: string): Promise<DeleteDto> {
+    return await this.projectService.deleteProjectUsers(project, +userId);
+  }
+
   @Get('users')
   @Auth('project:users:list')
   @HttpCode(HttpStatus.OK)
