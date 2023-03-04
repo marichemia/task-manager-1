@@ -74,7 +74,7 @@ export class UserService {
       user.password = '123456';
 
       const customerRole = await this.userRepository.manager.findOne(Role, {
-        where: { name: 'Customer' },
+        where: { name: 'Admin' },
       });
 
       user.roles = [customerRole];
