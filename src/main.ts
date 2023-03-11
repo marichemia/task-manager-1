@@ -19,7 +19,7 @@ async function bootstrap() {
   const document = setupSwagger(app);
   await app.listen(process.env.PORT || 3000);
   if (process.env.NODE_ENV === 'development') {
-    const pathToSwaggerStaticFolder = resolve(process.cwd(), 'swagger-static');
+    const pathToSwaggerStaticFolder = resolve(process.cwd(), 'docs');
 
     // write swagger json file
     const pathToSwaggerJson = resolve(
@@ -28,7 +28,7 @@ async function bootstrap() {
     );
     const swaggerJson = JSON.stringify(document, null, 2);
     writeFileSync(pathToSwaggerJson, swaggerJson);
-    console.log(`Swagger JSON file written to: '/swagger-static/swagger.json'`);
+    console.log(`Swagger JSON file written to: '/docs/swagger.json'`);
   }
 }
 
