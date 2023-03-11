@@ -12,9 +12,15 @@ import { TaskModule } from './modules/task/task.module';
 import { EpicsModule } from './modules/epics/epics.module';
 import { ProjectInterceptorModule } from './interceptors/project/project.module';
 import { contextMiddleware } from './middlewares';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'swagger-static'),
+      serveRoot: process.env.NODE_ENV === 'development' ? '/' : '/docs',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',

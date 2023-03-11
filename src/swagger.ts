@@ -20,4 +20,5 @@ export function setupSwagger(app: INestApplication) {
     customSiteTitle: 'Task Manager API Docs',
   };
   SwaggerModule.setup('docs', app, document, customOptions);
+  return document;
 }
