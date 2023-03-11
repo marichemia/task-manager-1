@@ -28,6 +28,7 @@ import { ProjectAccess } from '../../decorators/project.decorator';
 import { HeaderProject } from '../../decorators/project-http.decorator';
 import { Project } from './project.entity';
 import { UserDto } from '../user/dto/User.dto';
+import { ProjectWithBoardsDto } from "./dto/project-with-boards.dto";
 
 @ApiTags('Projects')
 @Controller('project')
@@ -57,6 +58,19 @@ export class ProjectController {
   })
   async getAll(): Promise<ProjectDto[]> {
     return await this.projectService.getAll();
+  }
+
+  @Get('/withBoards')
+  @Auth('project:dropdown')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get project list',
+    type: ProjectWithBoardsDto,
+    isArray: true,
+  })
+  async withBoards(): Promise<ProjectWithBoardsDto[]> {
+    return await this.projectService.withBoards();
   }
 
   @Get('/my')

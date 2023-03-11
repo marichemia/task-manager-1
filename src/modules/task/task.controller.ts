@@ -66,6 +66,20 @@ export class TaskController {
     return await this.taskService.findAll(project.id, dto);
   }
 
+  @Get('/my')
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({
+    status: HttpStatus.OK,
+    description: 'Create task',
+    type: TaskDto,
+    isArray: true,
+  })
+  async findAllMy(
+    @AuthUser() user: UserDto
+  ): Promise<TaskDto[]> {
+    return await this.taskService.findAllMy(user.id);
+  }
+
   @Get(':id')
   @Auth('task:view')
   @ProjectAccess()

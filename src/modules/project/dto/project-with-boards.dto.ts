@@ -1,9 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Board } from '../../board/entities/board.entity';
 import { BoardDto } from '../../board/dto/board.dto';
 
-export class ProjectDto {
+export class ProjectWithBoardsDto {
   @ApiProperty()
   id: number;
 
@@ -26,4 +26,7 @@ export class ProjectDto {
   @IsString()
   @IsNotEmpty()
   color: string;
+
+  @ApiPropertyOptional({ type: () => BoardDto, isArray: true })
+  boards: BoardDto[];
 }

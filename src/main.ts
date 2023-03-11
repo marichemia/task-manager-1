@@ -5,9 +5,6 @@ import helmet from "helmet";
 import { ValidationPipe } from "@nestjs/common";
 import { GlobalExceptionsFilter } from "./common/exceptions/GlobalExceptionsFilter";
 import { loggerMiddleware } from "./middlewares";
-import { resolve } from 'path';
-import { createWriteStream, writeFileSync } from "fs";
-import { get } from "http";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

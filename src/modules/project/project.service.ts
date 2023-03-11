@@ -13,6 +13,7 @@ import { snakeCase } from 'typeorm/util/StringUtils';
 import { User } from '../user/entities/user.entity';
 import { ProjectUsersDto } from './dto/project-users.dto';
 import { UserDto } from '../user/dto/User.dto';
+import { ProjectWithBoardsDto } from './dto/project-with-boards.dto';
 
 @Injectable()
 export class ProjectService {
@@ -54,6 +55,16 @@ export class ProjectService {
   async getAll(): Promise<ProjectDto[]> {
     try {
       return await this.repository.find();
+    } catch (e) {
+      throw new ExceptionType(e.statusCode, e.message);
+    }
+  }
+
+  async withBoards(): Promise<ProjectWithBoardsDto[]> {
+    try {
+      return await this.repository.find({
+        relations: ['boards'],
+      });
     } catch (e) {
       throw new ExceptionType(e.statusCode, e.message);
     }

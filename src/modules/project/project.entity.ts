@@ -4,11 +4,12 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
-  ManyToMany,
+  ManyToMany, OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+  UpdateDateColumn
+} from "typeorm";
 import { User } from '../user/entities/user.entity';
+import { Board } from "../board/entities/board.entity";
 
 @Entity({ name: 'projects', orderBy: { createdAt: 'DESC' } })
 export class Project {
@@ -68,4 +69,8 @@ export class Project {
     nullable: true,
   })
   deletedAt: Date;
+
+
+  @OneToMany(() => Board, (board) => board.project)
+  boards: Board[];
 }

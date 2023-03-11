@@ -82,6 +82,26 @@ export class TaskService {
     });
   }
 
+  async findAllMy(userId: number): Promise<TaskDto[]> {
+    return await this.repository.find({
+      where: {
+        assigneeId: userId
+      },
+      relations: [
+        'taskProperties',
+        'project',
+        'epic',
+        'issueType',
+        'board',
+        'boardColumn',
+        'createdBy',
+        'deletedBy',
+        'assignee',
+        'reporter',
+      ],
+    });
+  }
+
   async findOne(id: number): Promise<TaskDto> {
     try {
       const task = await this.repository.findOne({
@@ -121,7 +141,10 @@ export class TaskService {
         throw new ExceptionType(404, 'Task not found');
       }
       const boardColumn = await queryRunner.manager.findOne(BoardColumn, {
-        where: { boardId: updateTaskDto.boardId, taskStatus: updateTaskDto.taskStatus },
+        where: {
+          boardId: updateTaskDto.boardId,
+          taskStatus: updateTaskDto.taskStatus,
+        },
         order: {
           position: 'ASC',
         },
