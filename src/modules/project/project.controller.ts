@@ -61,7 +61,7 @@ export class ProjectController {
   }
 
   @Get('/withBoards')
-  @Auth('project:dropdown')
+  @Auth()
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
