@@ -67,6 +67,7 @@ export class TaskController {
   }
 
   @Get('/my')
+  @Auth()
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({
     status: HttpStatus.OK,
@@ -79,6 +80,7 @@ export class TaskController {
   ): Promise<TaskDto[]> {
     return await this.taskService.findAllMy(user.id);
   }
+
 
   @Get(':id')
   @Auth('task:view')
@@ -95,6 +97,8 @@ export class TaskController {
   ): Promise<TaskDto> {
     return await this.taskService.findOne(+id);
   }
+
+
 
   @Put(':id')
   @Auth('task:update')
