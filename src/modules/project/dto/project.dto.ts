@@ -26,4 +26,7 @@ export class ProjectDto {
   @IsString()
   @IsNotEmpty()
   color: string;
+
+  @ApiProperty({ type: [BoardDto] })
+  boards: BoardDto[];
 }

@@ -33,8 +33,10 @@ export class ProjectService {
       if (search) {
         queryBuilder.andWhere(`project.name ILIKE '%${search}%'`);
       }
-      const totalCount = await queryBuilder.getCount();
+      const totalCount = await queryBuilder
+        .getCount();
       const items = await queryBuilder
+        .leftJoinAndSelect('project.boards', 'boards')
         .orderBy(
           `project.${snakeCase(pageOptionsDto.orderBy)}`,
           pageOptionsDto.order,

@@ -100,8 +100,6 @@ export class BoardService {
           ),
       );
 
-      console.log(deleteBoardColumns)
-
       if (deleteBoardColumns && deleteBoardColumns.length > 0) {
         await queryRunner.manager.softDelete(BoardColumn, deleteBoardColumns);
       }
