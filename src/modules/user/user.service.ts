@@ -160,7 +160,7 @@ export class UserService {
           lastName: dto.lastName,
           email: dto.email,
           mobileNumber: dto.mobileNumber,
-          isActive: dto.isActive || false,
+          isActive: dto.isActive || true,
         },
       );
       return await this.findOne(userId);

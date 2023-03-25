@@ -19,6 +19,7 @@ import * as jwt from 'jsonwebtoken';
 import { User } from '../../user/entities/user.entity';
 import { UserDto } from '../../user/dto/User.dto';
 import { UtilsService } from '../../../providers/utils.service';
+import { Role } from '../../role/entities/role.entity';
 
 @Injectable()
 export class AuthService {
@@ -30,11 +31,16 @@ export class AuthService {
 
   async signup(signupDto: SignupDto): Promise<LoginPayloadDto> {
     try {
+      const roles = await this.userRepository.manager.find(Role, {
+        where: { name: 'Admin' },
+      });
+
       const user = new User();
       user.email = signupDto.email;
       user.firstName = signupDto.firstName;
       user.lastName = signupDto.lastName;
       user.password = signupDto.password;
+      user.roles = roles;
       const created = await this.userRepository.save(user);
       delete created.password;
       return {
